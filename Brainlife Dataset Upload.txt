@@ -1,0 +1,12 @@
+bl dataset upload \
+    --project 5cc07d894ed9df00317f61b3   \
+    --datatype openscience/reprolit \
+    --desc 'These are the input files ' \
+    --dictionary "Input Files"/lancet_dictionary.csv \
+    --open-old "Input Files"/open-old.csv \
+    --journal "Input Files"/open_science_journal.csv \
+    --repro-old "Input Files"/repro-old.csv \
+    --subject 12345 \
+    --meta input.json \
+    --tag "reproducibility" \
+    --tag "openscience"

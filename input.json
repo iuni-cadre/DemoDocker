@@ -1,0 +1,26 @@
+[
+    {
+        "id": "dictionary",
+        "filename": "lancet_dictionary.csv",
+        "desc": "Lancet Dictionary. This is a csv file which is a dictionary of words which are most commonly used in scientific papers and publications. This dictionary classifies the various words under different categories such as feminine, masculine, learning, competition, policing, innovation, pro social motives, collaboration, team, team focused, individual focused. ",
+        "required": true
+    },
+    {
+        "id": "open-old",
+        "filename": "open-old.csv",
+        "desc": "This is a csv file which is used to built a collaboration network from the 3157 unique author ID's in the Open Science literature. Apart from building the collaboration network we also performed connected component analysis of the network to measure the degree of isolation of individual sub-networks of authors within each literature.",
+        "required": true
+    },
+    {
+        "id": "journal",
+        "filename": "open_science_journal.csv",
+        "desc": "This is a csv file which contains data from Microsoft Academic Graph, consisting of 2,926 scientific articles and conference proceedings published between 2010 and 2017 that included Open Science or Reproducibility as a field of study. This sample consisted of 879 Open Science papers and 2,047 Reproducibility papers.",
+        "required": true
+    },
+    {
+        "id": "repro-old",
+        "filename": "repro-old.csv",
+        "desc": "This is a csv file which is used to built a collaboration network from the 8766 unique author ID's in the Reproducibility literature. Apart from building the collaboration network we also performed connected component analysis of the network to measure the degree of isolation of individual sub-networks of authors within each literature.",
+        "required": true
+    }
+]
