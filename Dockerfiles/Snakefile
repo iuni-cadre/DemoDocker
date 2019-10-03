@@ -1,0 +1,76 @@
+rule outputs:
+    input: 
+        "figures/openScience.pdf", "figures/reproducibility.pdf",
+        "output/OpenSci3.csv", "output/OpenSci3Discipline.csv",
+        "figures/SinglePie.pdf", "figures/MultiPie.pdf",
+        "figures/TimeHist.pdf", "figures/TeamSizeHist.pdf", "figures/TeamSizeHist_fem.pdf", "figures/TimeTrends_fem.pdf", "figures/PredictedProbs_multiauthor_spline2.pdf", 
+        "figures/FoS_appearances.pdf", "figures/PredictedProbs_multiauthor_spline2_FOS.pdf",
+        "output/abstracts_scored_custom.csv", "figures/ProSocialHist.pdf"
+
+rule dataIngestion:
+    input:
+        "input/Open-old.csv", "input/Reproduce-old.csv"
+    output:
+        "Open.csv", "Reproduce.csv"
+    script:
+        "scripts/dataIngestion.py"
+        
+rule dataTransformation:
+    input:
+        rules.dataIngestion.output
+    output:
+        open = "openRaw.graphml",
+        rep = "reproduceRaw.graphml", 
+        dup = "duplicated_remove.csv", 
+        genderInput = "newdataCombined.csv"
+    script:
+        "scripts/dataTransformation.R"
+
+rule genderDetect:
+    input:
+        rules.dataTransformation.output.genderInput
+    output:
+        opensci = "output/OpenSci3.csv", spie = "figures/SinglePie.pdf", mpie = "figures/MultiPie.pdf"
+    script:
+        "scripts/genderDetect.R"
+
+rule journalDisciplineMatch:
+    input:
+        rules.genderDetect.output.opensci, "input/OpenSci3Journal.csv"
+    output:
+        "output/OpenSci3Discipline.csv"
+    script:
+        "scripts/journalDisciplineMatch.py"
+        
+rule genderAnalysis:
+    input:
+        rules.journalDisciplineMatch.output
+    output:
+        "figures/TimeHist.pdf", "figures/TeamSizeHist.pdf", "figures/TeamSizeHist_fem.pdf", "figures/TimeTrends_fem.pdf", "figures/PredictedProbs_multiauthor_spline2.pdf", 
+        "figures/FoS_appearances.pdf", "figures/spline_estimates.pdf", "figures/PredictedProbs_multiauthor_spline2_FOS.pdf"
+    script:
+        "scripts/genderAnalysis.R"           
+        
+rule visualize:
+    input:
+        rules.dataTransformation.output.open, rules.dataTransformation.output.rep
+    output:
+        "figures/openScience.pdf", "figures/reproducibility.pdf"
+    script:
+        "figures/visualize.py"
+        
+rule computeSentiment:
+    input:
+        rules.journalDisciplineMatch.output, "input/Lancet Dictionaries.csv"
+    output:
+        "output/abstracts_scored_custom.csv", "abstracts_scored.csv"
+    script:
+        "scripts/computeSentiment.R"
+        
+rule textAnalysis:
+    input:
+        rules.computeSentiment.output, "input/Lancet Dictionaries.csv"
+    output:
+        "figures/ProSocialHist.pdf"
+    script:
+        "scripts/textAnalysis.R"

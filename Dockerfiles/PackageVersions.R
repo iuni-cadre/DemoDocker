@@ -1,0 +1,2 @@
+str(allPackage <- installed.packages(.Library, priority = "high"))
+allPackage [, c(1,3:5)]

@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:19.04
 WORKDIR /usr/local/bin
 
 # Define the ENV variables
@@ -6,7 +6,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # Install the Python Language and it's dependencies
 RUN apt-get update && apt-get upgrade -y \
-&& apt-get install -y python3 python3-pip
+&& apt-get install -y python3.7 python3-pip
 
 # Install the R Language and it's dependencies
 RUN apt-get update && apt-get upgrade -y \
@@ -21,6 +21,13 @@ COPY install.R .
 COPY HelloWorld.R .
 COPY HelloWorld.py .
 COPY Main.java .
+COPY Snakefile .
+COPY PackageVersions.R .
+
+# Copying all the files needed to run the snakemake script in the working directory of the image
+COPY input/ /usr/local/bin/input/
+COPY scripts/ /usr/local/bin/scripts/
+COPY figures/ /usr/local/bin/figures/
 
 # Install all the python packages required to run the script
 RUN pip3 install -r requirements.txt
@@ -70,43 +77,5 @@ RUN javac Main.java
 RUN ldconfig 
 
 EXPOSE 80
-ENTRYPOINT ["python3", "-u", "HelloWorld.py"]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
+# Default command
+CMD ["/bin/bash"]
